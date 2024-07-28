@@ -17,11 +17,18 @@ export const singup = async(req, res) => {
     }
     // kiểm tra xem username đã tồn tại chưa
     const exitEmail = await User.findOne({ email });
+    const exitUser = await User.findOne({ name });
+    if (exitUser) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            messages: ["Tên tài khoản đã tồn tại"],
+        });
+    }
     if (exitEmail) {
         return res.status(StatusCodes.BAD_REQUEST).json({
             messages: ["Email đã tồn tại"],
         });
     }
+
     // mã hóa password
     const hashedPassword = await bcryptjs.hash(password, 10);
     const role = (await User.countDocuments({})) === 0 ? "admin" : "user";
@@ -35,8 +42,8 @@ export const singup = async(req, res) => {
     User.password = undefined;
     return res.status(StatusCodes.CREATED).json({
         user,
-    })
-}
+    });
+};
 export const signin = async(req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -59,4 +66,17 @@ export const signin = async(req, res) => {
         token,
     });
 };
-export const logout = async(req, res) => {}
+export const checkrole = async(req, res, next) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        const { id } = jwt.verify(token, "123456");
+        const acc = await User.findById(id);
+        if (acc.role != "admin") {
+            return res.status(401).json({ message: "Bạn không có quyền " });
+        }
+        next();
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const logout = async(req, res) => {};

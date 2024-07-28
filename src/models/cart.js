@@ -16,12 +16,12 @@ const cartSchema = new Schema({
             type: Number,
             required: true,
         },
-        color: {
-            type: String,
-        },
-        price: {
-            type: Number,
-        },
+        // color: {
+        //     type: String,
+        // },
+        // price: {
+        //     type: Number,
+        // },
     }, ],
 }, { timestamps: true, versionKey: false });
 

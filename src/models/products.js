@@ -50,7 +50,6 @@ const productSchema = new mongoose.Schema({
     attributes: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Attribute",
-        required: true,
     },
 }, { timestamps: true, versionKey: false });
 
