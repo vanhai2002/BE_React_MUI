@@ -16,6 +16,28 @@ export const getProducts = async(req, res) => {
 
     }
 }
+export const toggleFeatured = async(req, res) => {
+    try {
+        // Lấy ID sản phẩm và trạng thái mới từ yêu cầu
+        const { id } = req.params;
+        const { featured } = req.body;
+
+        // Tìm và cập nhật sản phẩm
+        const data = await products.findOneAndUpdate({ _id: id }, { $set: { featured: featured } }, { new: true } // Trả về tài liệu đã cập nhật
+        );
+
+        // Kiểm tra xem sản phẩm có tồn tại không
+        if (!data) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Product not found" });
+        }
+
+        // Trả về sản phẩm đã được cập nhật
+        res.status(StatusCodes.OK).json(data);
+    } catch (error) {
+        // Xử lý lỗi
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+};
 export const getProductsbyId = async(req, res) => {
     // req là gửi yêu cầu lên 
     // res là trả về 

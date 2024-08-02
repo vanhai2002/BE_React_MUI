@@ -18,7 +18,7 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 server.use(morgan("dev"))
-    /// connect DB
+/// connect DB
 conectDB(process.env.DB_URL);
 //Router
 server.use(`/api`, ProductRouter);

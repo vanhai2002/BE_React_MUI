@@ -1,3 +1,4 @@
+import cart from "../models/cart.js";
 import Order from "../models/order.js";
 import { StatusCodes } from "http-status-codes";
 
@@ -10,6 +11,26 @@ export const createOrder = async(req, res) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
     }
 };
+
+export const clearCart = async(req, res) => {
+    try {
+        const { userId } = req.body;
+
+        // Kiểm tra nếu userId không có
+        if (!userId) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User ID is required.' });
+        }
+
+        // Xóa tất cả sản phẩm trong giỏ hàng của người dùng
+        await cart.deleteMany({ userId });
+
+        res.status(StatusCodes.OK).json({ message: 'Giỏ hàng đã được xóa.' });
+    } catch (error) {
+        console.error('Error clearing cart:', error); // In chi tiết lỗi
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Có lỗi xảy ra khi xóa giỏ hàng.', error: error.message });
+    }
+};
+
 export const getOrders = async(req, res) => {
     try {
         const order = await Order.find();

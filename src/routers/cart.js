@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { addItemToCart, decreaseProductQuantity, getCartByUserId, increaseProductQuantity, removeFromCart, updateProductQuantity } from "../controller/cart";
+import { clearCart } from "../controller/order";
 
 const routerCart = Router();
 
@@ -11,7 +12,8 @@ routerCart.post("/carts/add-to-cart", addItemToCart);
 routerCart.post("/carts/update", updateProductQuantity);
 // Xóa item trong giỏ hàng
 routerCart.post("/carts/remove", removeFromCart);
-// Tăng số lượng của sản phẩm trong giỏ hàng
+routerCart.post('/carts/clear', clearCart)
+    // Tăng số lượng của sản phẩm trong giỏ hàng
 routerCart.post("/carts/increase", increaseProductQuantity);
 // Giảm số lượng của sản phẩm trong giỏ hàng
 routerCart.post("/carts/decrease", decreaseProductQuantity);

@@ -36,13 +36,26 @@ const orderSchema = new mongoose.Schema({
     items: [orderItemSchema],
     orderNumber: {
         type: String,
-        auto: true,
         unique: true,
     },
-    // customerName: {
-    //     type: String,
-    //     required: true,
-    // },
+    customerInfo: {
+        name: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        },
+    },
     totalPrice: {
         type: Number,
         required: true,
@@ -57,6 +70,7 @@ const orderSchema = new mongoose.Schema({
         default: Date.now,
     },
 });
+
 // Tạo pre-save hook để sinh orderNumber trước khi lưu vào cơ sở dữ liệu
 orderSchema.pre("save", function(next) {
     if (!this.orderNumber) {
@@ -64,4 +78,5 @@ orderSchema.pre("save", function(next) {
     }
     next();
 });
+
 export default mongoose.model("Order", orderSchema);
